@@ -7,8 +7,6 @@
 
 import Foundation
 
-let apiEnd = ProcessInfo.processInfo.environment["API_END"] ?? String()
-
 protocol HTTPClient {
     func sendRequest<T: Decodable>(endpoint: Endpoint, responseModel: T.Type?) async -> Result<T?, RequestError>
 }
@@ -17,8 +15,8 @@ extension HTTPClient {
     
     func sendRequest<T: Decodable>(endpoint: Endpoint, responseModel: T.Type?) async -> Result<T?, RequestError> {
         
+        let apiEnd = ProcessInfo.processInfo.environment["API_END"] ?? String()
         let controllerApiUrl = URL(string: "\(apiEnd)\(endpoint.path)")
-        print(">> ", apiEnd)
         
         guard let url = controllerApiUrl else {
             return .failure(.invalidUrl)
